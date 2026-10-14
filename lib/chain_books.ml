@@ -21,3 +21,4 @@ module Reconciliation = Reconciliation
 module Price_source = Price_source
 module Valuation = Valuation
 module Chain_write = Chain_write
+module Books = Books
