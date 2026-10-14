@@ -15,3 +15,4 @@ module Normalized = Normalized
 module Normalizer = Normalizer
 module Chart = Chart
 module Booking = Booking
+module Opening = Opening
