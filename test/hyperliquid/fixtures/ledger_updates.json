@@ -1,0 +1,168 @@
+[
+ {
+  "time": 1782864060000,
+  "hash": "0x0101010101010101010101010101010101010101010101010101010101010101",
+  "delta": {
+   "type": "deposit",
+   "usdc": "1000.0"
+  }
+ },
+ {
+  "time": 1782864120000,
+  "hash": "0x0202020202020202020202020202020202020202020202020202020202020202",
+  "delta": {
+   "type": "accountClassTransfer",
+   "usdc": "300.0",
+   "toPerp": false
+  }
+ },
+ {
+  "time": 1782864180000,
+  "hash": "0x0303030303030303030303030303030303030303030303030303030303030303",
+  "delta": {
+   "type": "subAccountTransfer",
+   "usdc": "100.0",
+   "user": "0x00000000000000000000000000000000000000a1",
+   "destination": "0x00000000000000000000000000000000000000b2"
+  }
+ },
+ {
+  "time": 1782864240000,
+  "hash": "0x0404040404040404040404040404040404040404040404040404040404040404",
+  "delta": {
+   "type": "internalTransfer",
+   "usdc": "25.5",
+   "user": "0x00000000000000000000000000000000000000c3",
+   "destination": "0x00000000000000000000000000000000000000a1",
+   "fee": "0.0"
+  }
+ },
+ {
+  "time": 1782864300000,
+  "hash": "0x0505050505050505050505050505050505050505050505050505050505050505",
+  "delta": {
+   "type": "send",
+   "user": "0x00000000000000000000000000000000000000a1",
+   "destination": "0x00000000000000000000000000000000000000a1",
+   "sourceDex": "spot",
+   "destinationDex": "",
+   "token": "USDC",
+   "amount": "50.0",
+   "usdcValue": "50.0",
+   "fee": "0.0",
+   "nativeTokenFee": "0.0",
+   "nonce": 1782864300000,
+   "feeToken": ""
+  }
+ },
+ {
+  "time": 1782864360000,
+  "hash": "0x0606060606060606060606060606060606060606060606060606060606060606",
+  "delta": {
+   "type": "spotTransfer",
+   "token": "HYPE",
+   "amount": "1.0",
+   "usdcValue": "40.0",
+   "user": "0x00000000000000000000000000000000000000a1",
+   "destination": "0x00000000000000000000000000000000000000c3",
+   "fee": "1.0",
+   "nativeTokenFee": "0.0",
+   "nonce": null,
+   "feeToken": ""
+  }
+ },
+ {
+  "time": 1782864420000,
+  "hash": "0x0707070707070707070707070707070707070707070707070707070707070707",
+  "delta": {
+   "type": "cStakingTransfer",
+   "token": "HYPE",
+   "amount": "2.5",
+   "isDeposit": true
+  }
+ },
+ {
+  "time": 1782864480000,
+  "hash": "0x0808080808080808080808080808080808080808080808080808080808080808",
+  "delta": {
+   "type": "vaultDeposit",
+   "vault": "0x00000000000000000000000000000000000000d4",
+   "usdc": "100.0"
+  }
+ },
+ {
+  "time": 1782864540000,
+  "hash": "0x0909090909090909090909090909090909090909090909090909090909090909",
+  "delta": {
+   "type": "vaultWithdraw",
+   "vault": "0x00000000000000000000000000000000000000d4",
+   "user": "0x00000000000000000000000000000000000000a1",
+   "requestedUsd": "104.0000004",
+   "commission": "0.0",
+   "closingCost": "0.0",
+   "basis": "100.0",
+   "netWithdrawnUsd": "104.0000004"
+  }
+ },
+ {
+  "time": 1782864600000,
+  "hash": "0x0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a",
+  "delta": {
+   "type": "vaultDistribution",
+   "vault": "0x00000000000000000000000000000000000000d4",
+   "usdc": "3.25"
+  }
+ },
+ {
+  "time": 1782864660000,
+  "hash": "0x0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b0b",
+  "delta": {
+   "type": "gossipPriorityGasAuction",
+   "token": "HYPE",
+   "amount": "0.01"
+  }
+ },
+ {
+  "time": 1782864720000,
+  "hash": "0x0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c0c",
+  "delta": {
+   "type": "withdraw",
+   "usdc": "99.0",
+   "nonce": 1782864720000000,
+   "fee": "1.0"
+  }
+ },
+ {
+  "time": 1782864780000,
+  "hash": "0x0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d0d",
+  "delta": {
+   "type": "liquidation",
+   "liquidatedNtlPos": "145.503",
+   "accountValue": "0.330377",
+   "leverageType": "Cross",
+   "liquidatedPositions": [
+    {
+     "coin": "WIF",
+     "szi": "-510.0"
+    }
+   ]
+  }
+ },
+ {
+  "time": 1782864840000,
+  "hash": "0x0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e0e",
+  "delta": {
+   "type": "spotGenesis",
+   "token": "OTHER",
+   "amount": "1299.6241689"
+  }
+ },
+ {
+  "time": 1782864900000,
+  "hash": "0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f",
+  "delta": {
+   "type": "rewardsClaim",
+   "amount": "12.5"
+  }
+ }
+]

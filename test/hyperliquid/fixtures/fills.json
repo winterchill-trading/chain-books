@@ -1,0 +1,52 @@
+[
+ {
+  "coin": "BTC",
+  "px": "60000.0",
+  "sz": "0.02",
+  "side": "B",
+  "time": 1782865800000,
+  "startPosition": "0.0",
+  "dir": "Open Long",
+  "closedPnl": "0.0",
+  "hash": "0x2828282828282828282828282828282828282828282828282828282828282828",
+  "oid": 101,
+  "crossed": true,
+  "fee": "0.54",
+  "feeToken": "USDC",
+  "tid": 900001,
+  "builderFee": "0.12"
+ },
+ {
+  "coin": "BTC",
+  "px": "61000.0",
+  "sz": "0.01",
+  "side": "A",
+  "time": 1782865900000,
+  "startPosition": "0.02",
+  "dir": "Close Long",
+  "closedPnl": "10.0",
+  "hash": "0x2929292929292929292929292929292929292929292929292929292929292929",
+  "oid": 102,
+  "crossed": true,
+  "fee": "0.2745",
+  "feeToken": "USDC",
+  "tid": 900002,
+  "cloid": "0x0000000000000000000000000000abcd"
+ },
+ {
+  "coin": "@107",
+  "px": "40.0",
+  "sz": "2.0",
+  "side": "B",
+  "time": 1782866000000,
+  "startPosition": "0.0",
+  "dir": "Buy",
+  "closedPnl": "0.0",
+  "hash": "0x2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a",
+  "oid": 103,
+  "crossed": false,
+  "fee": "0.0008",
+  "feeToken": "HYPE",
+  "tid": 900003
+ }
+]
