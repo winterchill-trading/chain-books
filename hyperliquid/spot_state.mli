@@ -10,6 +10,7 @@
 
 open! Core
 
+(** One token's balance. *)
 module Balance : sig
   type t =
     { coin : string
@@ -18,6 +19,8 @@ module Balance : sig
   [@@deriving sexp_of]
 end
 
+(** Every token the account holds. *)
 type t = { balances : Balance.t list } [@@deriving sexp_of]
 
+(** Decodes the answer. *)
 val of_yojson : Yojson.Safe.t -> t Or_error.t

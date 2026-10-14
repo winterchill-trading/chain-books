@@ -7,9 +7,13 @@ open! Core
 (** [field json name] is the member [name] of an object. *)
 val field : Yojson.Safe.t -> string -> Yojson.Safe.t
 
+(** [field] that is [None] for a missing or [null] member. *)
 val field_opt : Yojson.Safe.t -> string -> Yojson.Safe.t option
+(** A string field. *)
 val string : Yojson.Safe.t -> string -> string
+(** An integer field. *)
 val int : Yojson.Safe.t -> string -> int
+(** A boolean field. *)
 val bool : Yojson.Safe.t -> string -> bool
 
 (** A decimal string field (["-0.026051"], ["5472272.8957780004"]) as an exact number;

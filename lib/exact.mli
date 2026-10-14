@@ -5,6 +5,7 @@
 
 open! Core
 
+(** An exact rational. *)
 type t = Q.t [@@deriving sexp, compare, equal]
 
 (** Parses an optional ['-'] followed by digits, a decimal or a fraction. *)
@@ -13,6 +14,7 @@ val of_string_or_error : string -> t Or_error.t
 (** Raises on malformed input. *)
 val of_string : string -> t
 
+(** ["-1.25"], or ["1/3"] when the decimal does not terminate. *)
 val to_string : t -> string
 
 (** Small decimals with up to four fractional digits, both signs. *)

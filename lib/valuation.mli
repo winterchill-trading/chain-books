@@ -10,6 +10,7 @@
 
 open! Core
 
+(** A price the valuation needed and could not use. *)
 module Missing : sig
   type what =
     | Rate of Money.Currency.t (** no usable rate from this asset to the currency *)
@@ -24,6 +25,7 @@ module Missing : sig
   [@@deriving sexp, compare, equal]
 end
 
+(** One location and asset. *)
 module Line : sig
   type t =
     { location : Location.t
@@ -33,6 +35,7 @@ module Line : sig
   [@@deriving sexp, compare, equal]
 end
 
+(** One open position. *)
 module Position_line : sig
   type t =
     { address : Address.t

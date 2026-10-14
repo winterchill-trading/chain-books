@@ -3,6 +3,7 @@
 
 open! Core
 
+(** A normalised value. *)
 type t =
   | Activity of Activity.t
   | Fill of Fill.t

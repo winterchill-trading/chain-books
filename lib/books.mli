@@ -12,6 +12,7 @@
 
 open! Core
 
+(** The books of one binding. *)
 type t
 
 (** Empty books. [method_] (default [Fifo]) is the cost-basis method; [follow], when
@@ -23,8 +24,11 @@ val create
   -> Chart.t
   -> t
 
+(** The chart the books post to. *)
 val chart : t -> Chart.t
+(** The ledger state: every account and entry booked so far. *)
 val balances : t -> Ledger.Balances.t
+(** Positions and cost basis from the fills applied so far. *)
 val positions : t -> Positions.t
 
 (** Every ledger record appended since {!create}, oldest first. *)

@@ -16,6 +16,7 @@
 
 open! Core
 
+(** Which lots a closing fill consumes. *)
 module Method : sig
   type t =
     | Average_cost
@@ -29,6 +30,7 @@ module Method : sig
   end
 end
 
+(** Size bought (or sold short) at one price. *)
 module Lot : sig
   type t =
     { size : Exact.t (** signed, never zero *)
@@ -45,6 +47,7 @@ module Lot : sig
   end
 end
 
+(** The lots and realised profit of one account in one instrument. *)
 module Position : sig
   type t =
     { address : Address.t
@@ -92,6 +95,7 @@ module Realisation : sig
   val difference_from_reported : t -> Money.Amount.t option
 end
 
+(** What {!apply} did with a fill. *)
 module Applied : sig
   type t =
     | Applied of Realisation.t
@@ -99,9 +103,12 @@ module Applied : sig
   [@@deriving sexp, compare, equal]
 end
 
+(** Every position, and the fills already applied. *)
 type t [@@deriving sexp_of]
 
+(** No positions, with the given cost-basis method. *)
 val empty : Method.t -> t
+(** The cost-basis method. *)
 val method_ : t -> Method.t
 
 (** Applies one fill. *)

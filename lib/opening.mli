@@ -15,6 +15,7 @@
 
 open! Core
 
+(** One derived opening and the figures behind it. *)
 module Derived : sig
   type t =
     { location : Location.t

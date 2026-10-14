@@ -34,8 +34,11 @@ module Kind : sig
     | Other
   [@@deriving sexp, compare, equal, hash, enumerate]
 
+  (** [deposit], [transfer_in], ... *)
   val to_string : t -> string
+  (** Parses {!to_string}. *)
   val of_string_or_error : string -> t Or_error.t
+  (** Every kind, uniformly. *)
   val quickcheck_generator : t Quickcheck.Generator.t
 
   module Stable : sig
@@ -59,6 +62,7 @@ module Counter : sig
   end
 end
 
+(** An activity; build one with {!create}, which checks it. *)
 type t = private
   { event_id : Event_id.t
   ; kind : Kind.t

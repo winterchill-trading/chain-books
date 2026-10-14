@@ -29,6 +29,7 @@ val perp_dex : string -> t Or_error.t
 (** [Perp] or a [Perp_dex]. *)
 val is_perp : t -> bool
 
+(** Every venue, with two dex names. *)
 val quickcheck_generator : t Quickcheck.Generator.t
 
 module Stable : sig

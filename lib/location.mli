@@ -4,6 +4,7 @@
 
 open! Core
 
+(** One venue of one address. *)
 type t =
   { address : Address.t
   ; venue : Venue.t
@@ -15,6 +16,7 @@ include Comparable.S with type t := t
 (** [<address>:<venue>]. *)
 val to_string : t -> string
 
+(** Locations over two addresses and every venue. *)
 val quickcheck_generator : t Quickcheck.Generator.t
 
 module Stable : sig

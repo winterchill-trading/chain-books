@@ -26,6 +26,7 @@
 
 open! Core
 
+(** Why the venue refused a write. *)
 module Reject_reason : sig
   type t =
     | Insufficient_balance
@@ -36,6 +37,7 @@ module Reject_reason : sig
   [@@deriving sexp, compare, equal]
 end
 
+(** Where a write stands. *)
 module Status : sig
   type t =
     | Signed (** stored, not yet answered *)
@@ -50,6 +52,7 @@ module Status : sig
   val is_final : t -> bool
 end
 
+(** When to resend after an unknown outcome. *)
 module Retry_policy : sig
   type t =
     { base : Time_ns.Span.t
@@ -66,6 +69,7 @@ module Retry_policy : sig
   val delay : t -> attempt:int -> Time_ns.Span.t
 end
 
+(** What happened to a write: an answer to a submission, or a sync that saw it. *)
 module Event : sig
   type t =
     | Accepted of

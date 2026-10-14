@@ -4,6 +4,7 @@
 
 open! Core
 
+(** Bought or sold. *)
 module Side : sig
   type t =
     | Buy
@@ -20,6 +21,7 @@ module Side : sig
   end
 end
 
+(** A fill; build one with {!create}, which checks it. *)
 type t = private
   { event_id : Event_id.t
   ; address : Address.t

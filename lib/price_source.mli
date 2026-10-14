@@ -5,6 +5,7 @@
 
 open! Core
 
+(** A mark price and when it was quoted. *)
 module Mark : sig
   type t =
     { price : Exact.t (** in the instrument's quote currency per unit *)
@@ -13,6 +14,7 @@ module Mark : sig
   [@@deriving sexp, compare, equal]
 end
 
+(** A source of rates and marks. *)
 type t
 
 (** [rate ~base ~quote] is the price of one [base] in [quote], if known. [mark] is an

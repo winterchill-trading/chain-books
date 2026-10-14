@@ -25,6 +25,7 @@ module Skip_reason : sig
   [@@deriving sexp, compare, equal]
 end
 
+(** The entry for an activity, or why there is none. *)
 module Outcome : sig
   type t =
     | Entry of Ledger.Entry.t

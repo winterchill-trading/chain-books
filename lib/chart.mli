@@ -13,9 +13,12 @@
 
 open! Core
 
+(** The chart of one binding. *)
 type t [@@deriving sexp_of]
 
+(** The chart of [binding]. *)
 val create : Binding_id.t -> t
+(** The binding every account id is prefixed with. *)
 val binding : t -> Binding_id.t
 
 (** The custody account of a location. *)

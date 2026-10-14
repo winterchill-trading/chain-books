@@ -12,6 +12,7 @@
 
 open! Core
 
+(** The outcome for one location and asset. *)
 module Status : sig
   type t =
     | Matched
@@ -27,6 +28,7 @@ module Status : sig
   end
 end
 
+(** One location and asset, both sides and the outcome. *)
 module Row : sig
   type t =
     { location : Location.t
@@ -44,6 +46,7 @@ module Row : sig
   end
 end
 
+(** One instrument: the tracked size against the reported one. *)
 module Position_row : sig
   type t =
     { address : Address.t

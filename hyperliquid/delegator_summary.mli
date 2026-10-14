@@ -6,6 +6,7 @@
 
 open! Core
 
+(** The amounts, exact. *)
 type t =
   { delegated : Q.t
   ; undelegated : Q.t
@@ -17,4 +18,5 @@ type t =
     withdrawal to spot. *)
 val staking_balance : t -> Q.t
 
+(** Decodes the answer. *)
 val of_yojson : Yojson.Safe.t -> t Or_error.t

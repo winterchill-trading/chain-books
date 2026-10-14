@@ -61,6 +61,7 @@ val account_kind : t -> Ledger.Account_kind.t
 (** [Clearing] for [spot_clearing], [Fee_income] for builder fees, [General] otherwise. *)
 val purpose : t -> Ledger.Account.Purpose.t
 
+(** Every built-in category and one custom category. *)
 val quickcheck_generator : t Quickcheck.Generator.t
 
 module Stable : sig

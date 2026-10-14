@@ -5,6 +5,7 @@ open! Core
 
 (** What an id module exposes. *)
 module type S = sig
+  (** A checked id. *)
   type t [@@deriving quickcheck]
 
   include Identifiable.S with type t := t
@@ -29,7 +30,9 @@ module Make (_ : sig
     (** Used in error messages, e.g. ["Chain_books.Event_id"]. *)
     val module_name : string
 
+    (** The longest id accepted. *)
     val max_length : int
+    (** Whether a character may appear in an id. *)
     val allowed_char : char -> bool
 
     (** Characters the quickcheck generator draws from. *)

@@ -13,6 +13,7 @@
 
 open! Core
 
+(** What changed: one constructor per delta [type]. *)
 module Delta : sig
   type t =
     | Deposit of { usdc : Q.t }
@@ -101,6 +102,7 @@ type t =
   }
 [@@deriving sexp_of]
 
+(** Decodes one item. *)
 val of_yojson : Yojson.Safe.t -> t Or_error.t
 
 (** A JSON array of updates, as the info request answers. *)

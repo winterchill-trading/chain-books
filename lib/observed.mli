@@ -3,6 +3,7 @@
 
 open! Core
 
+(** One asset's balance at one location. *)
 module Balance : sig
   type t =
     { location : Location.t
@@ -21,6 +22,7 @@ module Balance : sig
   end
 end
 
+(** One open position as the venue reports it. *)
 module Position : sig
   type t =
     { address : Address.t
@@ -47,6 +49,7 @@ type t =
   }
 [@@deriving sexp, compare, equal]
 
+(** A report with nothing in it. *)
 val empty : t
 
 (** Both lists concatenated, e.g. the perpetuals and the spot report of one account. *)

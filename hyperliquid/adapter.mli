@@ -28,6 +28,7 @@
 
 open! Core
 
+(** The venue records the adapter normalises. *)
 type event =
   | Fill of Hl_protocol.User_fill.Detailed.t
   | Funding of Funding.t

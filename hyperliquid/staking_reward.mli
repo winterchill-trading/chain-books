@@ -9,6 +9,7 @@
 
 open! Core
 
+(** One reward. *)
 type t =
   { time : int
   ; source : string
@@ -16,5 +17,7 @@ type t =
   }
 [@@deriving sexp_of]
 
+(** Decodes one item. *)
 val of_yojson : Yojson.Safe.t -> t Or_error.t
+(** Decodes the whole answer, a JSON array. *)
 val list_of_yojson : Yojson.Safe.t -> t list Or_error.t
