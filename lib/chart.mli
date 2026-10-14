@@ -7,8 +7,8 @@
 
     Ledger accounts hold several currencies, so one account per location carries every
     asset held there and a balance is looked up by location and asset. Custody accounts
-    may go negative: a sync can read one side of a transfer between two venues before
-    the other, and the books must accept that order. Spending checks (a payout must not
+    may go negative: a sync can read one side of a transfer between two venues before the
+    other, and the books must accept that order. Spending checks (a payout must not
     overdraw a location) belong to the caller. *)
 
 open! Core
@@ -18,6 +18,7 @@ type t [@@deriving sexp_of]
 
 (** The chart of [binding]. *)
 val create : Binding_id.t -> t
+
 (** The binding every account id is prefixed with. *)
 val binding : t -> Binding_id.t
 
@@ -43,8 +44,8 @@ val custody_account : t -> Location.t -> Ledger.Account.t
     {!Category.purpose}, [allow_negative], tagged with the binding and category. *)
 val counterparty_account : t -> Category.t -> Ledger.Account.t
 
-(** The accounts [activities] post to (with [classify] applied like {!Booking.entry}
-    does) that [balances] has not opened yet, without duplicates, sorted by id. *)
+(** The accounts [activities] post to (with [classify] applied like {!Booking.entry} does)
+    that [balances] has not opened yet, without duplicates, sorted by id. *)
 val missing_accounts
   :  t
   -> ?classify:(Activity.t -> Category.t option)

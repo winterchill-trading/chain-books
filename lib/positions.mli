@@ -1,18 +1,17 @@
 (** Positions and cost basis per account and instrument, from fills.
 
     A position is a list of lots (size and price), oldest first. A fill in the direction
-    of the position (or on a flat one) opens a lot; a fill against it closes size from
-    the lots and realises [closed * (fill price - lot price)] for a long, the opposite
-    for a short, in the instrument's quote currency; a fill larger than the position
-    closes it and opens the rest the other way. [Fifo] closes the oldest lots first;
-    [Average_cost] keeps one lot at the average price. Perpetuals and spot pairs follow
-    the same rules (for a spot pair the lots are the base asset bought, priced in the
-    quote currency).
+    of the position (or on a flat one) opens a lot; a fill against it closes size from the
+    lots and realises [closed * (fill price - lot price)] for a long, the opposite for a
+    short, in the instrument's quote currency; a fill larger than the position closes it
+    and opens the rest the other way. [Fifo] closes the oldest lots first; [Average_cost]
+    keeps one lot at the average price. Perpetuals and spot pairs follow the same rules
+    (for a spot pair the lots are the base asset bought, priced in the quote currency).
 
-    Fees are not part of the cost basis: they are booked as fees ({!Activity.Kind.Trade_fee}),
-    which is also how venues report closed profit and loss. Each fill's event id is
-    applied once; a fill seen again changes nothing. The realised figures are exact
-    rationals; {!Realisation.amount} rounds them to the currency once. *)
+    Fees are not part of the cost basis: they are booked as fees
+    ({!Activity.Kind.Trade_fee}), which is also how venues report closed profit and loss.
+    Each fill's event id is applied once; a fill seen again changes nothing. The realised
+    figures are exact rationals; {!Realisation.amount} rounds them to the currency once. *)
 
 open! Core
 
@@ -108,6 +107,7 @@ type t [@@deriving sexp_of]
 
 (** No positions, with the given cost-basis method. *)
 val empty : Method.t -> t
+
 (** The cost-basis method. *)
 val method_ : t -> Method.t
 
@@ -115,14 +115,8 @@ val method_ : t -> Method.t
 val apply : t -> Fill.t -> t * Applied.t
 
 (** Adds a lot without a fill: an asset received at a known cost (a transfer in, an
-    opening balance priced at market). A lot against the position's direction is
-    refused. *)
-val add_lot
-  :  t
-  -> address:Address.t
-  -> instrument:Instrument.t
-  -> Lot.t
-  -> t Or_error.t
+    opening balance priced at market). A lot against the position's direction is refused. *)
+val add_lot : t -> address:Address.t -> instrument:Instrument.t -> Lot.t -> t Or_error.t
 
 (** The position of an account in an instrument, flat ones included once traded. *)
 val find : t -> address:Address.t -> instrument:Instrument.t -> Position.t option

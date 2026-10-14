@@ -1,6 +1,6 @@
-(** Small JSON reading helpers shared by the decoders. Every reader raises
-    [Failure] with the field name on a missing or malformed field; the decoders turn that
-    into an [Or_error]. *)
+(** Small JSON reading helpers shared by the decoders. Every reader raises [Failure] with
+    the field name on a missing or malformed field; the decoders turn that into an
+    [Or_error]. *)
 
 open! Core
 
@@ -9,15 +9,18 @@ val field : Yojson.Safe.t -> string -> Yojson.Safe.t
 
 (** [field] that is [None] for a missing or [null] member. *)
 val field_opt : Yojson.Safe.t -> string -> Yojson.Safe.t option
+
 (** A string field. *)
 val string : Yojson.Safe.t -> string -> string
+
 (** An integer field. *)
 val int : Yojson.Safe.t -> string -> int
+
 (** A boolean field. *)
 val bool : Yojson.Safe.t -> string -> bool
 
-(** A decimal string field (["-0.026051"], ["5472272.8957780004"]) as an exact number;
-    a JSON number is accepted too. *)
+(** A decimal string field (["-0.026051"], ["5472272.8957780004"]) as an exact number; a
+    JSON number is accepted too. *)
 val decimal : Yojson.Safe.t -> string -> Q.t
 
 (** [decimal] for an optional or [null] field, zero when absent. *)

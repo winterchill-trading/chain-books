@@ -32,6 +32,7 @@ module Make (_ : sig
 
     (** The longest id accepted. *)
     val max_length : int
+
     (** Whether a character may appear in an id. *)
     val allowed_char : char -> bool
 

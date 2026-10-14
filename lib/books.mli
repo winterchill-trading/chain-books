@@ -1,14 +1,14 @@
 (** The books of one binding as one immutable value: ledger balances, positions, and the
-    locations whose opening balance is derived. A convenience over {!Booking},
-    {!Opening}, {!Positions}, {!Reconciliation} and {!Valuation} for callers that keep
-    the state in memory or snapshot it; a service with its own journal can call those
-    modules directly and append the entries itself.
+    locations whose opening balance is derived. A convenience over {!Booking}, {!Opening},
+    {!Positions}, {!Reconciliation} and {!Valuation} for callers that keep the state in
+    memory or snapshot it; a service with its own journal can call those modules directly
+    and append the entries itself.
 
     Every function returns a new value; the ledger records it appended are kept in order
-    ({!records}) so a caller can write them to a journal. Ingesting the same history
-    again is safe: an entry already booked under its key is reported as a duplicate, a
-    fill already applied is skipped. An event id reused for a different movement is an
-    error, and nothing from that call is kept. *)
+    ({!records}) so a caller can write them to a journal. Ingesting the same history again
+    is safe: an entry already booked under its key is reported as a duplicate, a fill
+    already applied is skipped. An event id reused for a different movement is an error,
+    and nothing from that call is kept. *)
 
 open! Core
 
@@ -26,8 +26,10 @@ val create
 
 (** The chart the books post to. *)
 val chart : t -> Chart.t
+
 (** The ledger state: every account and entry booked so far. *)
 val balances : t -> Ledger.Balances.t
+
 (** Positions and cost basis from the fills applied so far. *)
 val positions : t -> Positions.t
 
