@@ -38,7 +38,7 @@ end
     unit: the one rounding an adapter applies to a venue decimal. *)
 val round : Money.Currency.t -> Q.t -> Money.Amount.t
 
-(** [normalize_all (module N) config events] concatenates {!S.normalize} over [events],
+(** [normalize_all (module N) config events] concatenates {!S.normalize} over [events];
     when some records fail, the error lists every failure, tagged with the source. *)
 val normalize_all
   :  (module S with type config = 'c and type event = 'e)
