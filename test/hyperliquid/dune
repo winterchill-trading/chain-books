@@ -1,0 +1,20 @@
+(library
+ (name chain_books_hyperliquid_test)
+ (package chain-books)
+ (libraries
+  chain-books
+  chain-books.hyperliquid
+  hl-protocol
+  core
+  zarith
+  money
+  ledger
+  yojson
+  expect_test_helpers_core)
+ (inline_tests
+  (deps
+   (source_tree fixtures))
+  (flags
+   (:standard -source-tree-root .)))
+ (preprocess
+  (pps ppx_jane)))
