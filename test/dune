@@ -1,0 +1,9 @@
+(library
+ (name chain_books_test)
+ (package chain-books)
+ (libraries chain-books core zarith money ledger expect_test_helpers_core)
+ (inline_tests
+  (flags
+   (:standard -source-tree-root .)))
+ (preprocess
+  (pps ppx_jane)))
