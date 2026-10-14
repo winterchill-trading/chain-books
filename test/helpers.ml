@@ -79,3 +79,24 @@ let fill ?(address = address) ?(instrument = btc_perp) ?reported_pnl ?(at = t0) 
     ()
   |> Or_error.ok_exn
 ;;
+
+let observed ?(at = t0) balances : Observed.t =
+  { balances =
+      List.map balances ~f:(fun (location, amount) ->
+        { Observed.Balance.location; amount; observed_at = at })
+  ; positions = []
+  }
+;;
+
+let post b entry =
+  Ledger.Balances.apply b { seq = Ledger.Balances.next_seq b; event = Posted entry }
+  |> Or_error.ok_exn
+;;
+
+let open_account b account =
+  match Ledger.Balances.find_account b account.Ledger.Account.id with
+  | Some _ -> b
+  | None ->
+    Ledger.Balances.apply b { seq = Ledger.Balances.next_seq b; event = Account_opened account }
+    |> Or_error.ok_exn
+;;
