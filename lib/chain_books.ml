@@ -4,3 +4,4 @@ module Event_id = Event_id
 module Short_id = Short_id
 module Location = Location
 module Venue = Venue
+module Assets = Assets
