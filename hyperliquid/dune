@@ -1,0 +1,6 @@
+(library
+ (name chain_books_hyperliquid)
+ (public_name chain-books.hyperliquid)
+ (libraries chain-books hl-protocol core zarith money yojson)
+ (preprocess
+  (pps ppx_jane)))
