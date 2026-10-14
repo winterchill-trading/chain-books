@@ -18,3 +18,4 @@ module Booking = Booking
 module Opening = Opening
 module Positions = Positions
 module Reconciliation = Reconciliation
+module Price_source = Price_source
