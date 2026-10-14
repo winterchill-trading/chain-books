@@ -7,3 +7,4 @@ module Venue = Venue
 module Assets = Assets
 module Category = Category
 module Exact = Exact
+module Instrument = Instrument
