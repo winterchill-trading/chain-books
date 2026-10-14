@@ -48,10 +48,13 @@ type t = Fields.t =
 let validate (t : t) =
   let quote = Instrument.quote_currency t.instrument in
   if Q.sign t.size <= 0
-  then Or_error.error_s [%message "fill size must be positive" ~event_id:(t.event_id : Event_id.t)]
+  then
+    Or_error.error_s
+      [%message "fill size must be positive" ~event_id:(t.event_id : Event_id.t)]
   else if Q.sign t.price <= 0
   then
-    Or_error.error_s [%message "fill price must be positive" ~event_id:(t.event_id : Event_id.t)]
+    Or_error.error_s
+      [%message "fill price must be positive" ~event_id:(t.event_id : Event_id.t)]
   else (
     match t.reported_pnl with
     | Some pnl when not (Money.Currency.equal (Money.Amount.currency pnl) quote) ->
@@ -63,9 +66,9 @@ let validate (t : t) =
     | Some _ | None -> Ok t)
 ;;
 
-let create ~event_id ~address ~instrument ~side ~size ~price ~occurred_at ?reported_pnl () =
-  validate
-    { event_id; address; instrument; side; size; price; occurred_at; reported_pnl }
+let create ~event_id ~address ~instrument ~side ~size ~price ~occurred_at ?reported_pnl ()
+  =
+  validate { event_id; address; instrument; side; size; price; occurred_at; reported_pnl }
 ;;
 
 let signed_size t = if Side.sign t.side > 0 then t.size else Q.neg t.size

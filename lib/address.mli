@@ -3,5 +3,4 @@
     is case-sensitive, so normalising the case of EVM addresses is the adapter's job. *)
 
 open! Core
-
 include Short_id.S

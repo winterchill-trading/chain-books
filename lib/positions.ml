@@ -84,7 +84,10 @@ module Realisation = struct
   [@@deriving sexp, compare, equal]
 
   let amount t =
-    Money.Amount.of_q ~rounding:Half_even (Instrument.quote_currency t.instrument) t.realised
+    Money.Amount.of_q
+      ~rounding:Half_even
+      (Instrument.quote_currency t.instrument)
+      t.realised
   ;;
 
   let difference_from_reported t =
@@ -117,7 +120,6 @@ type t =
 
 let empty method_ = { method_; positions = Key.Map.empty; seen = Event_id.Set.empty }
 let method_ t = t.method_
-
 let find t ~address ~instrument = Map.find t.positions (address, instrument)
 
 let get t ~address ~instrument =
@@ -168,7 +170,11 @@ let apply t (fill : Fill.t) =
     let signed = Fill.signed_size fill in
     let current = Position.size position in
     let new_lot size : Lot.t =
-      { size; price = fill.price; opened_at = fill.occurred_at; opened_by = fill.event_id }
+      { size
+      ; price = fill.price
+      ; opened_at = fill.occurred_at
+      ; opened_by = fill.event_id
+      }
     in
     let lots, closed, realised =
       if Q.equal current Q.zero || sign current = sign signed
@@ -204,7 +210,8 @@ let apply t (fill : Fill.t) =
       }
     in
     ( { t with
-        positions = Map.set t.positions ~key:(fill.address, fill.instrument) ~data:position
+        positions =
+          Map.set t.positions ~key:(fill.address, fill.instrument) ~data:position
       ; seen = Set.add t.seen fill.event_id
       }
     , Applied.Applied realisation ))
@@ -254,7 +261,10 @@ module Stable = struct
     type nonrec t = t
 
     let to_repr t =
-      { Repr.method_ = t.method_; positions = Map.data t.positions; seen = Set.to_list t.seen }
+      { Repr.method_ = t.method_
+      ; positions = Map.data t.positions
+      ; seen = Set.to_list t.seen
+      }
     ;;
 
     let of_repr (r : Repr.t) =

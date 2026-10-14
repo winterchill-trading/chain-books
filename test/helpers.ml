@@ -65,7 +65,15 @@ let cp_balance b category currency =
 let btc_perp = Instrument.perp ~coin:"BTC" ~settle:usdc |> Or_error.ok_exn
 let hype_spot = Instrument.spot ~base:hype ~quote:usdc |> Or_error.ok_exn
 
-let fill ?(address = address) ?(instrument = btc_perp) ?reported_pnl ?(at = t0) id side size price
+let fill
+  ?(address = address)
+  ?(instrument = btc_perp)
+  ?reported_pnl
+  ?(at = t0)
+  id
+  side
+  size
+  price
   =
   Fill.create
     ~event_id:(eid id)
@@ -97,6 +105,8 @@ let open_account b account =
   match Ledger.Balances.find_account b account.Ledger.Account.id with
   | Some _ -> b
   | None ->
-    Ledger.Balances.apply b { seq = Ledger.Balances.next_seq b; event = Account_opened account }
+    Ledger.Balances.apply
+      b
+      { seq = Ledger.Balances.next_seq b; event = Account_opened account }
     |> Or_error.ok_exn
 ;;

@@ -1,6 +1,6 @@
 (** What the Hyperliquid adapter needs besides the records: the account being read, the
-    other addresses of the binding (so transfers between them are internal), and how
-    venue token names map to currencies. *)
+    other addresses of the binding (so transfers between them are internal), and how venue
+    token names map to currencies. *)
 
 open! Core
 
@@ -8,8 +8,8 @@ open! Core
 module Rewards : sig
   type t =
     | On_claim
-    (** income when claimed: a claim books [referral_reward] income at the claim
-        venue. Use this when builder fills are not booked. *)
+    (** income when claimed: a claim books [referral_reward] income at the claim venue.
+        Use this when builder fills are not booked. *)
     | Accrued
     (** builder fills are booked as income to the [rewards] venue as they happen, and a
         claim moves the claimed amount from [rewards] to the claim venue *)

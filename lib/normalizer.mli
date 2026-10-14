@@ -3,9 +3,9 @@
     is the caller's job.
 
     Rules an adapter follows, so that the books stay idempotent and balanced:
-    - event ids are deterministic functions of the venue's ids (a trade id, a
-      transaction hash and the update's type, a timestamp and a market), never of the
-      time of reading or of a position in a page;
+    - event ids are deterministic functions of the venue's ids (a trade id, a transaction
+      hash and the update's type, a timestamp and a market), never of the time of reading
+      or of a position in a page;
     - every movement between two locations of the binding is one activity with a
       [Location] counter, not one per side;
     - decimal amounts are rounded to the asset's minor unit once, half-even, here and

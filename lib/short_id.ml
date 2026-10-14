@@ -65,7 +65,9 @@ module Make (P : sig
   let quickcheck_generator =
     let open Quickcheck.Generator.Let_syntax in
     let%bind len = Int.gen_incl 1 (Int.min 16 max_length) in
-    String.gen_with_length len (Quickcheck.Generator.of_list (String.to_list P.sample_chars))
+    String.gen_with_length
+      len
+      (Quickcheck.Generator.of_list (String.to_list P.sample_chars))
   ;;
 
   let quickcheck_observer = String.quickcheck_observer

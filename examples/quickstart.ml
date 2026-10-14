@@ -6,7 +6,13 @@ open! Core
 open Chain_books
 
 let usdc = Money.Currency.usdc
-let at minute = Time_ns.add (Time_ns.of_string_with_utc_offset "2026-07-01 00:00:00Z") (Time_ns.Span.of_int_min minute)
+
+let at minute =
+  Time_ns.add
+    (Time_ns.of_string_with_utc_offset "2026-07-01 00:00:00Z")
+    (Time_ns.Span.of_int_min minute)
+;;
+
 let amount currency s = Money.Amount.of_decimal_string currency s |> Or_error.ok_exn
 let address = Address.of_string "0x00000000000000000000000000000000000000a1"
 let perp = { Location.address; venue = Perp }
@@ -45,7 +51,8 @@ let history =
   ; Fill (fill "fill-2" Sell "0.02" "61000" ~reported_pnl:(amount usdc "20") 3)
   ; Activity (activity "fill-2:pnl" Trade perp (amount usdc "20") 3)
   ; Activity (activity "fill-2:fee" Trade_fee perp (amount usdc "-0.55") 3)
-  ; Activity (activity "move-1" Internal perp (amount usdc "-250") ~counter:(Location spot) 4)
+  ; Activity
+      (activity "move-1" Internal perp (amount usdc "-250") ~counter:(Location spot) 4)
   ]
 ;;
 
@@ -61,7 +68,10 @@ let () =
         (Event_id.to_string r.event_id)
         (Money.Amount.to_string (Positions.Realisation.amount r)));
   List.iter [ perp; spot ] ~f:(fun l ->
-    printf "%s %s\n" (Location.to_string l) (Money.Amount.to_string (Books.balance books l usdc)));
+    printf
+      "%s %s\n"
+      (Location.to_string l)
+      (Money.Amount.to_string (Books.balance books l usdc)));
   (* The first report shows 120 USDC more on spot than the window booked: it was there
      before the window started. *)
   let report_at = at 30 in
@@ -74,14 +84,17 @@ let () =
     }
   in
   let books, openings =
-    Books.open_balances books observed ~history_start:(at 0) ~at:report_at |> Or_error.ok_exn
+    Books.open_balances books observed ~history_start:(at 0) ~at:report_at
+    |> Or_error.ok_exn
   in
   List.iter openings ~f:(fun o ->
     printf
       "opening %s %s\n"
       (Location.to_string o.location)
       (Money.Amount.to_string o.difference));
-  printf "breaks: %d\n" (List.length (Reconciliation.breaks (Books.reconcile books observed)));
+  printf
+    "breaks: %d\n"
+    (List.length (Reconciliation.breaks (Books.reconcile books observed)));
   let valuation =
     Books.value books (Price_source.of_table ()) ~currency:usdc ~now:report_at
   in

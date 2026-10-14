@@ -7,9 +7,7 @@ type t =
   }
 [@@deriving sexp_of]
 
-let staking_balance t =
-  Q.add t.delegated (Q.add t.undelegated t.total_pending_withdrawal)
-;;
+let staking_balance t = Q.add t.delegated (Q.add t.undelegated t.total_pending_withdrawal)
 
 let of_json json =
   { delegated = Wire.decimal json "delegated"

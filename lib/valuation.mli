@@ -2,11 +2,11 @@
     one reporting currency through a {!Price_source}.
 
     A balance is worth [balance * rate]; an open position adds its unrealised profit,
-    [size * mark - cost] in the instrument's quote currency, converted the same way.
-    Lines are rounded half-even for display; the total is summed exactly and rounded
-    once. A rate or mark older than [max_age] is stale: the line is left unvalued and
-    named in [missing], like one with no price at all, so a report never mixes fresh and
-    stale prices silently. Valuation books nothing. *)
+    [size * mark - cost] in the instrument's quote currency, converted the same way. Lines
+    are rounded half-even for display; the total is summed exactly and rounded once. A
+    rate or mark older than [max_age] is stale: the line is left unvalued and named in
+    [missing], like one with no price at all, so a report never mixes fresh and stale
+    prices silently. Valuation books nothing. *)
 
 open! Core
 

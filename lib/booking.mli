@@ -11,8 +11,8 @@
     is the ledger time the caller passes. The code follows the kind ([Deposit],
     [Withdrawal], [Fee] for fees, [Interest] for funding and staking rewards,
     [Transfer_intraledger] otherwise); the kind is [Transfer "chain_<kind>"]; the
-    reference is the transaction hash, or the event id when there is none; the
-    remittance information is the market, if any. *)
+    reference is the transaction hash, or the event id when there is none; the remittance
+    information is the market, if any. *)
 
 open! Core
 

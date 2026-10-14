@@ -1,15 +1,15 @@
-(** One item of the [userNonFundingLedgerUpdates] info request: every balance change of
-    an account that is not a fill or a funding payment.
+(** One item of the [userNonFundingLedgerUpdates] info request: every balance change of an
+    account that is not a fill or a funding payment.
 
     {v
     {"time": 1739891428531, "hash": "0x489d...", "delta": {"type": "withdraw", "usdc": "99.0", "nonce": 1739891096964000, "fee": "1.0"}}
     v}
 
-    The delta types below were checked against mainnet answers in October 2026; any
-    other type (liquidations, which move money through fills, lending, priority gas
-    auctions of other tokens, ...) is kept as [Other] with its JSON. Amounts are exact
-    decimals; [rewardsClaim] is decoded from its documented [amount] field (no mainnet
-    sample was available). *)
+    The delta types below were checked against mainnet answers in October 2026; any other
+    type (liquidations, which move money through fills, lending, priority gas auctions of
+    other tokens, ...) is kept as [Other] with its JSON. Amounts are exact decimals;
+    [rewardsClaim] is decoded from its documented [amount] field (no mainnet sample was
+    available). *)
 
 open! Core
 

@@ -84,8 +84,12 @@ let to_string = function
 
 let custom ~name ~kind =
   let ok_char c = Char.is_lowercase c || Char.is_digit c || Char.equal c '_' in
-  let builtin_clash = List.exists all_builtin ~f:(fun c -> String.equal (to_string c) name) in
-  if String.length name < 1 || String.length name > 24 || not (String.for_all name ~f:ok_char)
+  let builtin_clash =
+    List.exists all_builtin ~f:(fun c -> String.equal (to_string c) name)
+  in
+  if String.length name < 1
+     || String.length name > 24
+     || not (String.for_all name ~f:ok_char)
   then Or_error.error_s [%message "invalid custom category name" name]
   else if builtin_clash
   then Or_error.error_s [%message "custom category clashes with a built-in one" name]
@@ -96,8 +100,12 @@ let account_kind : t -> Ledger.Account_kind.t = function
   | Bridge | External | Opening_balance -> Equity
   | Spot_clearing | Vaults | Other -> Asset
   | Trading_fees -> Expense
-  | Perp_pnl | Funding | Builder_fees | Referral_rewards | Vault_commission | Staking_rewards
-    -> Income
+  | Perp_pnl
+  | Funding
+  | Builder_fees
+  | Referral_rewards
+  | Vault_commission
+  | Staking_rewards -> Income
   | Custom { kind; name = _ } -> kind
 ;;
 

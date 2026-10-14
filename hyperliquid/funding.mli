@@ -5,10 +5,10 @@
     {"time": 1791072000000, "hash": "0x0000...", "delta": {"type": "funding", "coin": "ARB", "usdc": "0.026784", "szi": "-445.4041666667", "fundingRate": "0.000012358", "nSamples": 24}}
     v}
 
-    [usdc] is signed from the account's side: positive when funding was received. The
-    hash is all zeros on mainnet, so payments are identified by time and coin. [szi] can
-    carry more digits than [Hl_protocol.Size] holds (an average over the hour), which is
-    why this module decodes the history itself. *)
+    [usdc] is signed from the account's side: positive when funding was received. The hash
+    is all zeros on mainnet, so payments are identified by time and coin. [szi] can carry
+    more digits than [Hl_protocol.Size] holds (an average over the hour), which is why
+    this module decodes the history itself. *)
 
 open! Core
 

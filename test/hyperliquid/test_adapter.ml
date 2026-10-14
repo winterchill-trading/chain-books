@@ -37,7 +37,9 @@ let show items =
         counter)
 ;;
 
-let ledger_updates () = Hl.Ledger_update.list_of_yojson (read "ledger_updates.json") |> ok_exn
+let ledger_updates () =
+  Hl.Ledger_update.list_of_yojson (read "ledger_updates.json") |> ok_exn
+;;
 
 let%expect_test "ledger updates" =
   let events = List.map (ledger_updates ()) ~f:(fun u -> Hl.Adapter.Ledger_update u) in
@@ -85,7 +87,8 @@ let other_events () =
 
 let%expect_test "fills, funding and staking rewards" =
   show (Normalizer.normalize_all (module Hl.Adapter) config (other_events ()) |> ok_exn);
-  [%expect {|
+  [%expect
+    {|
     fill fill:900001 perp:BTC Buy 0.02 @ 60000
     fill:900001:fee                              trade_fee        a1:perp        -0.420000 USDC  <-> trading_fees
     fill:900001:builder                          builder_fee      a1:perp        -0.120000 USDC  <-> builder_fees
@@ -104,9 +107,12 @@ let%expect_test "fills, funding and staking rewards" =
 
 let report () : Hl.Adapter.report =
   { perp =
-      [ None, Hl_protocol.Clearinghouse_state.t_of_yojson (read "clearinghouse_state.json") ]
+      [ ( None
+        , Hl_protocol.Clearinghouse_state.t_of_yojson (read "clearinghouse_state.json") )
+      ]
   ; spot = Some (Hl.Spot_state.of_yojson (read "spot_state.json") |> ok_exn)
-  ; staking = Some (Hl.Delegator_summary.of_yojson (read "delegator_summary.json") |> ok_exn)
+  ; staking =
+      Some (Hl.Delegator_summary.of_yojson (read "delegator_summary.json") |> ok_exn)
   ; observed_at = Hl.Adapter.time_of_ms 1782950400000
   }
 ;;
@@ -121,7 +127,8 @@ let%expect_test "observed balances and positions" =
       (Instrument.to_string p.instrument)
       (Exact.to_string p.size)
       (Option.value_map p.entry_price ~default:"-" ~f:Exact.to_string));
-  [%expect {|
+  [%expect
+    {|
     a1:perp      1045.300000 USDC
     a1:spot      170.000000 USDC
     a1:spot      10.48920000 HYPE
@@ -132,7 +139,8 @@ let%expect_test "observed balances and positions" =
 
 let%expect_test "end to end: books, openings, reconciliation and value" =
   let events =
-    List.map (ledger_updates ()) ~f:(fun u -> Hl.Adapter.Ledger_update u) @ other_events ()
+    List.map (ledger_updates ()) ~f:(fun u -> Hl.Adapter.Ledger_update u)
+    @ other_events ()
   in
   let items = Normalizer.normalize_all (module Hl.Adapter) config events |> ok_exn in
   let chart = Chart.create (Binding_id.of_string "treasury") in
@@ -145,22 +153,33 @@ let%expect_test "end to end: books, openings, reconciliation and value" =
     (List.length ingested.realised);
   let observed = Hl.Adapter.observe config (report ()) |> ok_exn in
   let books, openings =
-    Books.open_balances books observed ~history_start:(Hl.Adapter.time_of_ms 1782864000000) ~at
+    Books.open_balances
+      books
+      observed
+      ~history_start:(Hl.Adapter.time_of_ms 1782864000000)
+      ~at
     |> ok_exn
   in
   List.iter openings ~f:(fun o ->
-    printf "opening %-12s %s\n" (short_location o.location) (Money.Amount.to_string o.difference));
-  let tolerance c = Money.Amount.of_minor_units_int c 1 in
-  List.iter (Reconciliation.breaks (Books.reconcile ~tolerance books observed)) ~f:(fun r ->
     printf
-      "break %-12s %s %s\n"
-      (short_location r.location)
-      (Money.Currency.to_string r.asset)
-      (Sexp.to_string [%sexp (r.status : Reconciliation.Status.t)]));
+      "opening %-12s %s\n"
+      (short_location o.location)
+      (Money.Amount.to_string o.difference));
+  let tolerance c = Money.Amount.of_minor_units_int c 1 in
+  List.iter
+    (Reconciliation.breaks (Books.reconcile ~tolerance books observed))
+    ~f:(fun r ->
+      printf
+        "break %-12s %s %s\n"
+        (short_location r.location)
+        (Money.Currency.to_string r.asset)
+        (Sexp.to_string [%sexp (r.status : Reconciliation.Status.t)]));
   List.iter (Books.reconcile_positions books observed) ~f:(fun r ->
     print_s [%sexp (r : Reconciliation.Position_row.t)]);
-  Ledger.Trial_balance.check (Ledger.Trial_balance.of_balances (Books.balances books)) |> ok_exn;
-  [%expect {|
+  Ledger.Trial_balance.check (Ledger.Trial_balance.of_balances (Books.balances books))
+  |> ok_exn;
+  [%expect
+    {|
     booked 25, skipped 0, fills 3
     opening a1:perp      440.890551 USDC
     opening a1:spot      1.000000 USDC
@@ -174,7 +193,9 @@ let%expect_test "end to end: books, openings, reconciliation and value" =
     |}]
 ;;
 
-let%expect_test "a transfer between two bound addresses is the same activity from either side" =
+let%expect_test "a transfer between two bound addresses is the same activity from either \
+                 side"
+  =
   let update =
     List.find_exn (ledger_updates ()) ~f:(fun u ->
       String.equal (Hl.Ledger_update.Delta.type_name u.delta) "subAccountTransfer")
@@ -190,18 +211,33 @@ let%expect_test "unknown spot pairs and tokens are dropped, malformed records ar
   let unknown_pair =
     Hl_protocol.User_fill.Detailed.t_of_yojson
       (`Assoc
-        [ "coin", `String "@999"; "px", `String "1.0"; "sz", `String "1.0"; "side", `String "B"
-        ; "time", `Int 1782864000000; "startPosition", `String "0.0"; "dir", `String "Buy"
-        ; "closedPnl", `String "0.0"; "hash", `String "0x00"; "oid", `Int 1
-        ; "crossed", `Bool true; "fee", `String "0.0"; "tid", `Int 5
+        [ "coin", `String "@999"
+        ; "px", `String "1.0"
+        ; "sz", `String "1.0"
+        ; "side", `String "B"
+        ; "time", `Int 1782864000000
+        ; "startPosition", `String "0.0"
+        ; "dir", `String "Buy"
+        ; "closedPnl", `String "0.0"
+        ; "hash", `String "0x00"
+        ; "oid", `Int 1
+        ; "crossed", `Bool true
+        ; "fee", `String "0.0"
+        ; "tid", `Int 5
         ])
   in
-  print_s [%sexp (Hl.Adapter.normalize config (Fill unknown_pair) |> ok_exn : Normalized.t list)];
+  print_s
+    [%sexp
+      (Hl.Adapter.normalize config (Fill unknown_pair) |> ok_exn : Normalized.t list)];
   [%expect {| () |}];
   print_s
     [%sexp
       (Hl.Ledger_update.of_yojson
-         (`Assoc [ "time", `Int 1; "hash", `String "0x"; "delta", `Assoc [ "type", `String "deposit" ] ])
+         (`Assoc
+           [ "time", `Int 1
+           ; "hash", `String "0x"
+           ; "delta", `Assoc [ "type", `String "deposit" ]
+           ])
        |> Or_error.map ~f:ignore
        : unit Or_error.t)];
   [%expect {| (Error ("decoding ledger update" (Failure "field usdc: missing"))) |}]

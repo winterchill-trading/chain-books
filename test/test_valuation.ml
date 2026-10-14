@@ -26,7 +26,8 @@ let%expect_test "balances at rates, positions at marks, one rounding for the tot
   let prices =
     Price_source.of_table
       ~rates:[ rate hype usdc "41.123456789" ~at:(at_min 5) ]
-      ~marks:[ btc_perp, { Price_source.Mark.price = Exact.of_string "61000"; at = at_min 5 } ]
+      ~marks:
+        [ btc_perp, { Price_source.Mark.price = Exact.of_string "61000"; at = at_min 5 } ]
       ()
   in
   let v = Valuation.value chart b ps prices ~currency:usdc ~now:(at_min 10) in
@@ -50,11 +51,7 @@ let%expect_test "balances at rates, positions at marks, one rounding for the tot
 
 let%expect_test "missing and stale prices leave lines unvalued and are listed" =
   let b, ps = books () in
-  let prices =
-    Price_source.of_table
-      ~rates:[ rate usdc hype "0.025" ~at:t0 ]
-      ()
-  in
+  let prices = Price_source.of_table ~rates:[ rate usdc hype "0.025" ~at:t0 ] () in
   let v =
     Valuation.value
       chart

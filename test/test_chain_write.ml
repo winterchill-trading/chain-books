@@ -55,11 +55,14 @@ let%expect_test "unknown outcomes resend the same body with doubling delays" =
 ;;
 
 let%expect_test "a refusal needs a reversal; a reused nonce does not" =
-  let rejected = step (prepared ()) (Rejected { reason = Insufficient_balance; at = t0 }) in
+  let rejected =
+    step (prepared ()) (Rejected { reason = Insufficient_balance; at = t0 })
+  in
   let reused = step (prepared ()) (Rejected { reason = Nonce_used; at = t0 }) in
   print_s
     [%sexp
-      (Chain_write.needs_reversal rejected : bool), (Chain_write.needs_reversal reused : bool)];
+      (Chain_write.needs_reversal rejected : bool)
+      , (Chain_write.needs_reversal reused : bool)];
   [%expect
     {|
     ((status (Rejected Insufficient_balance)) (attempts 1) (next ()))
@@ -72,8 +75,11 @@ let%expect_test "attempts run out into unconfirmed" =
   let policy = { Chain_write.Retry_policy.default with max_attempts = 2 } in
   let w = prepared () in
   let w = Chain_write.apply ~policy w (Outcome_unknown { at = t0 }) |> Or_error.ok_exn in
-  let w = Chain_write.apply ~policy w (Outcome_unknown { at = at_min 1 }) |> Or_error.ok_exn in
-  print_s [%sexp (w.status : Chain_write.Status.t), (Chain_write.due w ~now:(at_min 60) : bool)];
+  let w =
+    Chain_write.apply ~policy w (Outcome_unknown { at = at_min 1 }) |> Or_error.ok_exn
+  in
+  print_s
+    [%sexp (w.status : Chain_write.Status.t), (Chain_write.due w ~now:(at_min 60) : bool)];
   [%expect {| (Unconfirmed false) |}]
 ;;
 

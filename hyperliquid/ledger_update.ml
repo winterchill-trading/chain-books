@@ -1,4 +1,5 @@
 open! Core
+
 module Q_sexp = struct
   type t = Q.t
 
@@ -111,7 +112,8 @@ module Delta = struct
     let open Wire in
     match string json "type" with
     | "deposit" -> Deposit { usdc = decimal json "usdc" }
-    | "withdraw" -> Withdraw { usdc = decimal json "usdc"; fee = decimal_or_zero json "fee" }
+    | "withdraw" ->
+      Withdraw { usdc = decimal json "usdc"; fee = decimal_or_zero json "fee" }
     | "internalTransfer" ->
       Internal_transfer
         { usdc = decimal json "usdc"
@@ -144,7 +146,9 @@ module Delta = struct
         ; source_dex = string json "sourceDex"
         ; destination_dex = string json "destinationDex"
         ; fee = decimal_or_zero json "fee"
-        ; fee_token = Option.value_map (field_opt json "feeToken") ~default:"" ~f:(fun _ -> string json "feeToken")
+        ; fee_token =
+            Option.value_map (field_opt json "feeToken") ~default:"" ~f:(fun _ ->
+              string json "feeToken")
         }
     | "vaultCreate" ->
       Vault_create
@@ -152,7 +156,8 @@ module Delta = struct
         ; usdc = decimal json "usdc"
         ; fee = decimal_or_zero json "fee"
         }
-    | "vaultDeposit" -> Vault_deposit { vault = address json "vault"; usdc = decimal json "usdc" }
+    | "vaultDeposit" ->
+      Vault_deposit { vault = address json "vault"; usdc = decimal json "usdc" }
     | "vaultWithdraw" ->
       Vault_withdraw
         { vault = address json "vault"

@@ -44,6 +44,7 @@ let token t name = Map.find t.tokens name
 
 let collateral t (venue : Chain_books.Venue.t) =
   match venue with
-  | Perp_dex dex -> Option.value (Map.find t.dex_collateral dex) ~default:Money.Currency.usdc
+  | Perp_dex dex ->
+    Option.value (Map.find t.dex_collateral dex) ~default:Money.Currency.usdc
   | Perp | Spot | Rewards | Vault | Staking -> Money.Currency.usdc
 ;;

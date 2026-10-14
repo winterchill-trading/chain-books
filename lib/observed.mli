@@ -9,8 +9,8 @@ module Balance : sig
     { location : Location.t
     ; amount : Money.Amount.t
     (** the asset's balance at the location. For a perpetuals margin account this is the
-        account value minus unrealised profit and loss, which is what the books hold
-        (open positions are not booked until they realise). *)
+        account value minus unrealised profit and loss, which is what the books hold (open
+        positions are not booked until they realise). *)
     ; observed_at : Time_ns.Alternate_sexp.t
     }
   [@@deriving sexp, compare, equal]

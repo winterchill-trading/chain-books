@@ -9,14 +9,18 @@ type t =
 
 let of_json json =
   let delta = Wire.field json "delta" in
-  { time = Wire.int json "time"; coin = Wire.string delta "coin"; usdc = Wire.decimal delta "usdc" }
+  { time = Wire.int json "time"
+  ; coin = Wire.string delta "coin"
+  ; usdc = Wire.decimal delta "usdc"
+  }
 ;;
 
 let of_yojson = Wire.decode ~what:"funding" of_json
 
 let list_of_yojson = function
   | `List items -> List.map items ~f:of_yojson |> Or_error.combine_errors
-  | json -> Wire.decode ~what:"funding history" (fun _ -> failwith "not a JSON array") json
+  | json ->
+    Wire.decode ~what:"funding history" (fun _ -> failwith "not a JSON array") json
 ;;
 
 let of_user_event (f : Hl_protocol.User_event.Funding.t) =

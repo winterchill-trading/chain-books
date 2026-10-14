@@ -1,7 +1,7 @@
-(** Exact rational quantities and prices ([Q.t]) for sizes and prices that are not
-    amounts of a currency: perpetual contract sizes, prices quoted per unit. Written as a
-    signed decimal (["-1.25"]) when the decimal terminates and as a fraction (["1/3"])
-    otherwise, in sexps and in bin_prot. *)
+(** Exact rational quantities and prices ([Q.t]) for sizes and prices that are not amounts
+    of a currency: perpetual contract sizes, prices quoted per unit. Written as a signed
+    decimal (["-1.25"]) when the decimal terminates and as a fraction (["1/3"]) otherwise,
+    in sexps and in bin_prot. *)
 
 open! Core
 

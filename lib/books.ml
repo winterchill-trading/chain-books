@@ -88,10 +88,17 @@ let ingest t items ~at =
   let at = ledger_time t at in
   let activities = Normalized.activities items in
   let%bind.Or_error t =
-    open_accounts t (Chart.missing_accounts t.chart ~classify:t.classify t.balances activities)
+    open_accounts
+      t
+      (Chart.missing_accounts t.chart ~classify:t.classify t.balances activities)
   in
   let empty =
-    { Report.booked = []; duplicates = []; skipped = []; realised = []; repeated_fills = [] }
+    { Report.booked = []
+    ; duplicates = []
+    ; skipped = []
+    ; realised = []
+    ; repeated_fills = []
+    }
   in
   let%map.Or_error t, report =
     List.fold_result items ~init:(t, empty) ~f:(fun (t, report) item ->
@@ -101,7 +108,8 @@ let ingest t items ~at =
         let report =
           match applied with
           | Applied r -> { report with realised = r :: report.realised }
-          | Duplicate -> { report with repeated_fills = fill.event_id :: report.repeated_fills }
+          | Duplicate ->
+            { report with repeated_fills = fill.event_id :: report.repeated_fills }
         in
         Ok ({ t with positions }, report)
       | Activity activity ->

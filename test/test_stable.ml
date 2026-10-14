@@ -32,7 +32,8 @@ let%expect_test "stable bin_prot digests" =
     ; "Chain_write", [%bin_digest: Chain_write.Stable.V1.t]
     ]
     ~f:(fun (name, digest) -> printf "%-22s %s\n" name digest);
-  [%expect {|
+  [%expect
+    {|
     Binding_id             d9a8da25d5656b016fb4dbdc2e4197fb
     Address                d9a8da25d5656b016fb4dbdc2e4197fb
     Event_id               d9a8da25d5656b016fb4dbdc2e4197fb
@@ -66,14 +67,18 @@ let round_trip (type a) (module M : Binable.S with type t = a) ~equal (v : a) =
 ;;
 
 let%test_unit "activities, fills and positions round trip through bin_prot and sexp" =
-  let a = activity "x1" Internal perp (usd "-1.5") ~counter:(Location spot) ~reference:"0xab" in
+  let a =
+    activity "x1" Internal perp (usd "-1.5") ~counter:(Location spot) ~reference:"0xab"
+  in
   round_trip (module Activity.Stable.V1) ~equal:Activity.equal a;
   [%test_result: Activity.t] (Activity.t_of_sexp (Activity.sexp_of_t a)) ~expect:a;
   let f = fill "f1" Sell "0.25" "1/3" ~reported_pnl:(usd "1") in
   round_trip (module Fill.Stable.V1) ~equal:Fill.equal f;
   let ps, _ = Positions.apply (Positions.empty Average_cost) f in
   let back =
-    Binable.of_string (module Positions.Stable.V1) (Binable.to_string (module Positions.Stable.V1) ps)
+    Binable.of_string
+      (module Positions.Stable.V1)
+      (Binable.to_string (module Positions.Stable.V1) ps)
   in
   [%test_result: Positions.Position.t list]
     (Positions.positions back)
@@ -92,13 +97,17 @@ let%expect_test "decoding validates again" =
          ~pattern:"(Location((address 0xa1)(venue Spot)))"
          ~with_:"(Location((address 0xa1)(venue Perp)))")
   in
-  print_s [%sexp (Or_error.try_with (fun () -> Activity.t_of_sexp bad) |> Or_error.map ~f:ignore : unit Or_error.t)];
+  print_s
+    [%sexp
+      (Or_error.try_with (fun () -> Activity.t_of_sexp bad) |> Or_error.map ~f:ignore
+       : unit Or_error.t)];
   print_s
     [%sexp
       (Or_error.try_with (fun () -> Event_id.t_of_sexp (Sexp.Atom "has space"))
        |> Or_error.map ~f:ignore
        : unit Or_error.t)];
-  [%expect {|
+  [%expect
+    {|
     (Error ("activity moves an asset from a location to itself" (event_id x1)))
     (Error
      ((Chain_books.Event_id (id "has space")) ("character not allowed" (c " "))))

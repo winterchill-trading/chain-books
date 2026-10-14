@@ -32,7 +32,8 @@ let%expect_test "outflows credit custody; internal transfers move between locati
       ]
   in
   List.iter [ perp; spot ] ~f:(fun l -> print_amount (balance b l usdc));
-  List.iter [ Category.Bridge; Trading_fees ] ~f:(fun c -> print_amount (cp_balance b c usdc));
+  List.iter [ Category.Bridge; Trading_fees ] ~f:(fun c ->
+    print_amount (cp_balance b c usdc));
   [%expect
     {|
     59.750000 USDC
@@ -40,7 +41,9 @@ let%expect_test "outflows credit custody; internal transfers move between locati
     90.000000 USDC
     0.250000 USDC
     |}];
-  print_s [%sexp (Ledger.Trial_balance.check (Ledger.Trial_balance.of_balances b) : unit Or_error.t)];
+  print_s
+    [%sexp
+      (Ledger.Trial_balance.check (Ledger.Trial_balance.of_balances b) : unit Or_error.t)];
   [%expect {| (Ok ()) |}]
 ;;
 
@@ -76,8 +79,7 @@ let%expect_test "classify moves a counterparty booking to another category" =
   in
   print_amount (cp_balance b hedge usdc);
   print_amount (cp_balance b Trading_fees usdc);
-  [%expect
-    {|
+  [%expect {|
     1.000000 USDC
     2.000000 USDC
     |}]

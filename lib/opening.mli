@@ -5,8 +5,7 @@
     and what the window booked up to that moment is the balance the location already had
     before the window. It is booked once, against the [opening_balance] category, under
     the key [chain:<binding>:opening:<address>:<venue>:<asset>] and dated at the start of
-    the history window ([effective_at]), so that statements over the window start from
-    it.
+    the history window ([effective_at]), so that statements over the window start from it.
 
     Once derived, an opening is never derived again: later differences are breaks for
     {!Reconciliation}, not openings. The key makes a second booking a duplicate in the

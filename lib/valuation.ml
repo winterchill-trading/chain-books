@@ -57,7 +57,8 @@ let conversion prices ~max_age ~now ~currency asset : (Q.t, Missing.t) Result.t 
   else (
     match Price_source.rate prices ~base:asset ~quote:currency with
     | None -> Error { what = Rate asset; stale_since = None }
-    | Some rate when fresh ~max_age ~now (Money.Rate.at rate) -> Ok (Money.Rate.price rate)
+    | Some rate when fresh ~max_age ~now (Money.Rate.at rate) ->
+      Ok (Money.Rate.price rate)
     | Some rate -> Error { what = Rate asset; stale_since = Some (Money.Rate.at rate) })
 ;;
 
@@ -67,26 +68,30 @@ let value chart ?max_age balances positions prices ~currency ~now =
   let total = ref Q.zero in
   let round q = Money.Amount.of_q ~rounding:Half_even currency q in
   let lines =
-    List.concat_map (Ledger.Balances.accounts balances) ~f:(fun (account : Ledger.Account.t) ->
-      match Chart.location_of_account chart account.id with
-      | None -> []
-      | Some location ->
-        List.filter_map (Ledger.Balances.currencies balances account.id) ~f:(fun asset ->
-          let balance = Ledger.Balances.posted balances account.id asset in
-          if Money.Amount.is_zero balance
-          then None
-          else (
-            let value =
-              match conversion prices ~max_age ~now ~currency asset with
-              | Error m ->
-                note m;
-                None
-              | Ok price ->
-                let v = Q.mul (Money.Amount.to_q balance) price in
-                total := Q.add !total v;
-                Some (round v)
-            in
-            Some { Line.location; balance; value })))
+    List.concat_map
+      (Ledger.Balances.accounts balances)
+      ~f:(fun (account : Ledger.Account.t) ->
+        match Chart.location_of_account chart account.id with
+        | None -> []
+        | Some location ->
+          List.filter_map
+            (Ledger.Balances.currencies balances account.id)
+            ~f:(fun asset ->
+              let balance = Ledger.Balances.posted balances account.id asset in
+              if Money.Amount.is_zero balance
+              then None
+              else (
+                let value =
+                  match conversion prices ~max_age ~now ~currency asset with
+                  | Error m ->
+                    note m;
+                    None
+                  | Ok price ->
+                    let v = Q.mul (Money.Amount.to_q balance) price in
+                    total := Q.add !total v;
+                    Some (round v)
+                in
+                Some { Line.location; balance; value })))
   in
   let positions =
     List.map (Positions.open_positions positions) ~f:(fun (p : Positions.Position.t) ->
@@ -102,7 +107,7 @@ let value chart ?max_age balances positions prices ~currency ~now =
           None
       in
       let unrealised =
-        let%bind.Option mark = mark in
+        let%bind.Option mark in
         match conversion prices ~max_age ~now ~currency quote with
         | Error m ->
           note m;

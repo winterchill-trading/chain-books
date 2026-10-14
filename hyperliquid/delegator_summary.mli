@@ -14,8 +14,8 @@ type t =
   }
 [@@deriving sexp_of]
 
-(** Everything still in the staking account: delegated, undelegated and pending
-    withdrawal to spot. *)
+(** Everything still in the staking account: delegated, undelegated and pending withdrawal
+    to spot. *)
 val staking_balance : t -> Q.t
 
 (** Decodes the answer. *)

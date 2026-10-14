@@ -3,8 +3,8 @@
     reported for a person (or a later rule) to explain.
 
     Balance statuses:
-    - [Matched]: equal, or within the tolerance (one minor unit per rounded amount is
-      the usual choice when the venue reports more digits than the asset books);
+    - [Matched]: equal, or within the tolerance (one minor unit per rounded amount is the
+      usual choice when the venue reports more digits than the asset books);
     - [Difference]: both sides known and apart by more than the tolerance;
     - [Untracked]: reported (non-zero) at a location the books have never booked to,
       typically before its opening balance is derived;

@@ -22,8 +22,8 @@
 
     {2 Balances}
 
-    The observed perpetuals balance is the account value minus unrealised profit (what
-    the books hold); the staking balance is delegated plus undelegated plus pending
+    The observed perpetuals balance is the account value minus unrealised profit (what the
+    books hold); the staking balance is delegated plus undelegated plus pending
     withdrawals. *)
 
 open! Core

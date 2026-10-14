@@ -2,15 +2,15 @@
 
     Venue records (fills, funding payments, deposits and transfers, staking rewards)
     become normalised {!Activity} and {!Fill} values through a {!Normalizer}; activities
-    become balanced [Ledger] entries over a {!Chart} of accounts ({!Booking}); fills
-    feed positions and cost basis ({!Positions}). Balance reports from the chain give
-    each location its opening balance once ({!Opening}) and are then reconciled against
-    the books ({!Reconciliation}); holdings are valued through a {!Price_source}
+    become balanced [Ledger] entries over a {!Chart} of accounts ({!Booking}); fills feed
+    positions and cost basis ({!Positions}). Balance reports from the chain give each
+    location its opening balance once ({!Opening}) and are then reconciled against the
+    books ({!Reconciliation}); holdings are valued through a {!Price_source}
     ({!Valuation}). {!Books} ties these together as one immutable value, and
     {!Chain_write} is the record that makes writes to the chain safe to retry.
 
-    Pure: no storage, no network, no clock. The sub-library [chain-books.hyperliquid]
-    is the adapter for Hyperliquid.
+    Pure: no storage, no network, no clock. The sub-library [chain-books.hyperliquid] is
+    the adapter for Hyperliquid.
 
     {[
       let books = Books.create (Chart.create (Binding_id.of_string "treasury")) in

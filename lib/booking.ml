@@ -63,7 +63,9 @@ let entry chart ?(classify = fun _ -> None) ?follow ~at (activity : Activity.t) 
         ~kind:(Transfer ("chain_" ^ Activity.Kind.to_string activity.kind))
         ~code:(code activity.kind)
         ~reference:
-          (Option.value activity.reference ~default:(Event_id.to_string activity.event_id))
+          (Option.value
+             activity.reference
+             ~default:(Event_id.to_string activity.event_id))
         ~remittance_info:(Option.value activity.market ~default:"")
         ~effective_at:activity.occurred_at
         ~recorded_at:at

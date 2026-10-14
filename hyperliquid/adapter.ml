@@ -45,10 +45,17 @@ let venue_of_dex = function
 ;;
 
 let is_spot_coin coin = String.is_prefix coin ~prefix:"@" || String.mem coin '/'
-let usd_q u = Wire.q_of_fixed ~units:(Hl_protocol.Usd.to_units u) ~units_per_one:Hl_protocol.Usd.units_per_one
+
+let usd_q u =
+  Wire.q_of_fixed
+    ~units:(Hl_protocol.Usd.to_units u)
+    ~units_per_one:Hl_protocol.Usd.units_per_one
+;;
 
 let size_q s =
-  Wire.q_of_fixed ~units:(Hl_protocol.Size.to_units s) ~units_per_one:Hl_protocol.Size.units_per_one
+  Wire.q_of_fixed
+    ~units:(Hl_protocol.Size.to_units s)
+    ~units_per_one:Hl_protocol.Size.units_per_one
 ;;
 
 let price_q p =
@@ -57,11 +64,26 @@ let price_q p =
     ~units_per_one:Hl_protocol.Price.units_per_one
 ;;
 
-let zero_hash hash = String.for_all (String.chop_prefix_if_exists hash ~prefix:"0x") ~f:(Char.equal '0')
+let zero_hash hash =
+  String.for_all (String.chop_prefix_if_exists hash ~prefix:"0x") ~f:(Char.equal '0')
+;;
+
 let reference_of_hash hash = if zero_hash hash then None else Some hash
 
 (* One activity with its amount rounded once, here. *)
-let activity ~id ~kind ~location ~currency ~amount ~at ?counter ?market ?reference ?client_key () =
+let activity
+  ~id
+  ~kind
+  ~location
+  ~currency
+  ~amount
+  ~at
+  ?counter
+  ?market
+  ?reference
+  ?client_key
+  ()
+  =
   let%bind.Or_error event_id = Event_id.of_string_or_error id in
   let%map.Or_error a =
     Activity.create
@@ -143,7 +165,9 @@ let fill_activities (config : Config.t) (d : Hl_protocol.User_fill.Detailed.t) =
     | None -> Ok []
     | Some (base, quote) ->
       let location = location config Spot in
-      let sign = Q.of_int (Fill.Side.sign (if Hl_protocol.Side.is_buy f.side then Buy else Sell)) in
+      let sign =
+        Q.of_int (Fill.Side.sign (if Hl_protocol.Side.is_buy f.side then Buy else Sell))
+      in
       let fee_currency =
         Option.bind f.fee_token ~f:(Config.token config) |> Option.value ~default:quote
       in
@@ -229,8 +253,8 @@ let fill_activities (config : Config.t) (d : Hl_protocol.User_fill.Detailed.t) =
 (* {1 Ledger updates} *)
 
 (* A movement of [amount] of [currency] from [user] at [src] to [destination] at [dst],
-   seen from the binding: internal when both ends are bound, a transfer in or out when
-   one is, nothing when neither is. *)
+   seen from the binding: internal when both ends are bound, a transfer in or out when one
+   is, nothing when neither is. *)
 let movement
   (config : Config.t)
   ~id
@@ -253,7 +277,12 @@ let movement
   match Config.is_bound config user, Config.is_bound config destination with
   | true, true when Location.equal from to_ -> Ok []
   | true, true ->
-    make ~kind:internal_kind ~location:from ~amount:(Q.neg amount) ~counter:(Location to_) ()
+    make
+      ~kind:internal_kind
+      ~location:from
+      ~amount:(Q.neg amount)
+      ~counter:(Location to_)
+      ()
   | true, false -> make ~kind:Transfer_out ~location:from ~amount:(Q.neg amount) ()
   | false, true -> make ~kind:Transfer_in ~location:to_ ~amount ()
   | false, false -> Ok []
@@ -334,7 +363,8 @@ let ledger_activities (config : Config.t) (u : Ledger_update.t) =
         [ mv ~user ~destination ~src:Spot ~dst:Spot ~currency amount
         ; fee_from ~user ~venue:Spot ~currency:usdc fee
         ])
-  | Send { token; amount; user; destination; source_dex; destination_dex; fee; fee_token } ->
+  | Send { token; amount; user; destination; source_dex; destination_dex; fee; fee_token }
+    ->
     with_token token (fun currency ->
       let%bind.Or_error src = venue_of_dex source_dex in
       let%bind.Or_error dst = venue_of_dex destination_dex in
@@ -359,7 +389,8 @@ let ledger_activities (config : Config.t) (u : Ledger_update.t) =
     one ~kind:Vault_commission ~venue:Perp ~currency:usdc x
   | Rewards_claim { amount } ->
     (match config.rewards with
-     | On_claim -> one ~kind:Referral_reward ~venue:config.claim_venue ~currency:usdc amount
+     | On_claim ->
+       one ~kind:Referral_reward ~venue:config.claim_venue ~currency:usdc amount
      | Accrued ->
        one
          ~kind:Internal
@@ -370,7 +401,12 @@ let ledger_activities (config : Config.t) (u : Ledger_update.t) =
   | C_staking_transfer { token; amount; is_deposit } ->
     with_token token (fun currency ->
       let from, to_ = if is_deposit then Venue.Spot, Venue.Staking else Staking, Spot in
-      one ~kind:Staking ~venue:from ~currency ~counter:(Location (here to_)) (Q.neg amount))
+      one
+        ~kind:Staking
+        ~venue:from
+        ~currency
+        ~counter:(Location (here to_))
+        (Q.neg amount))
   | Spot_genesis { token; amount } ->
     with_token token (fun currency -> one ~kind:Other ~venue:Spot ~currency amount)
   | Gas_auction { token; amount } ->

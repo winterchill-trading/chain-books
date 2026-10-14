@@ -1,17 +1,16 @@
 (** The two-step record of a write to the chain (a send, a transfer between venues, a
     withdrawal, an order), so that a retry never signs twice.
 
-    {ol
-    {- Prepare: pick a nonce with {!next_nonce}, sign, and store the record with the
-       exact request body ({!prepare}) before anything is sent.}
-    {- Submit the stored body and apply what came back: [Accepted], [Rejected], or
-       [Outcome_unknown] when the venue could not be reached or answered with a
-       throttling or server error.}
-    {- After an unknown outcome, resend the {e same} body ({!body_to_send}) when
-       {!due}: the nonce makes a duplicate harmless, while a newly signed body could
-       execute twice. Delays double from [base] up to [cap].}
-    {- A sync that sees the movement on chain (an activity whose client key is this
-       record's) applies [Seen_on_chain], which confirms it from any open state.}}
+    + Prepare: pick a nonce with {!next_nonce}, sign, and store the record with the exact
+      request body ({!prepare}) before anything is sent.
+    + Submit the stored body and apply what came back: [Accepted], [Rejected], or
+      [Outcome_unknown] when the venue could not be reached or answered with a throttling
+      or server error.
+    + After an unknown outcome, resend the {e same} body ({!body_to_send}) when {!due}:
+      the nonce makes a duplicate harmless, while a newly signed body could execute twice.
+      Delays double from [base] up to [cap].
+    + A sync that sees the movement on chain (an activity whose client key is this
+      record's) applies [Seen_on_chain], which confirms it from any open state.
 
     {v
     signed --accepted--> accepted --seen--> confirmed
@@ -21,8 +20,8 @@
     any open state --rejected nonce_used--> unconfirmed
     v}
 
-    [Unconfirmed] is never reversed automatically: an earlier attempt may have landed
-    (a reused nonce says the venue has seen it), so a person or a later sync decides. *)
+    [Unconfirmed] is never reversed automatically: an earlier attempt may have landed (a
+    reused nonce says the venue has seen it), so a person or a later sync decides. *)
 
 open! Core
 
@@ -110,19 +109,19 @@ val prepare
   -> at:Time_ns.t
   -> t Or_error.t
 
-(** Applies an answer or an observation. Fails on an event the status does not accept
-    (an answer to a final record, a second acceptance). *)
+(** Applies an answer or an observation. Fails on an event the status does not accept (an
+    answer to a final record, a second acceptance). *)
 val apply : ?policy:Retry_policy.t -> t -> Event.t -> t Or_error.t
 
-(** Whether the body should be sent now: [Signed] (the first attempt), or [Retrying]
-    and its time has come. *)
+(** Whether the body should be sent now: [Signed] (the first attempt), or [Retrying] and
+    its time has come. *)
 val due : t -> now:Time_ns.t -> bool
 
 (** The stored body when {!due}; an error otherwise. *)
 val body_to_send : t -> now:Time_ns.t -> string Or_error.t
 
-(** [Rejected]: nothing reached the chain, so whatever the caller booked for the write
-    (a debit to an in-transit account) must be reversed. *)
+(** [Rejected]: nothing reached the chain, so whatever the caller booked for the write (a
+    debit to an in-transit account) must be reversed. *)
 val needs_reversal : t -> bool
 
 module Stable : sig

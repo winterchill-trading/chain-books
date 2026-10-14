@@ -57,7 +57,9 @@ let decimal_or_zero json name =
   | Some v -> decimal_of name v
 ;;
 
-let address json name = Hl_protocol.Address.of_string (String.lowercase (string json name))
+let address json name =
+  Hl_protocol.Address.of_string (String.lowercase (string json name))
+;;
 
 let decode ~what f json =
   Or_error.try_with (fun () -> f json) |> Or_error.tag ~tag:("decoding " ^ what)

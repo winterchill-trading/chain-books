@@ -24,9 +24,13 @@ val create
   -> mark:(Instrument.t -> Mark.t option)
   -> t
 
-(** A fixed table. A rate is found as given or through its inverse; when several rates
-    or marks are given for the same pair or instrument the latest wins. *)
-val of_table : ?rates:Money.Rate.t list -> ?marks:(Instrument.t * Mark.t) list -> unit -> t
+(** A fixed table. A rate is found as given or through its inverse; when several rates or
+    marks are given for the same pair or instrument the latest wins. *)
+val of_table
+  :  ?rates:Money.Rate.t list
+  -> ?marks:(Instrument.t * Mark.t) list
+  -> unit
+  -> t
 
 (** The rate of [base] in [quote]; [None] when they are the same currency (a
     [Money.Rate.t] needs two), which callers value at one. *)

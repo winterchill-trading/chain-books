@@ -20,9 +20,7 @@ end
 
 include T
 
-let to_string { address; venue } =
-  Address.to_string address ^ ":" ^ Venue.to_string venue
-;;
+let to_string { address; venue } = Address.to_string address ^ ":" ^ Venue.to_string venue
 
 let quickcheck_generator =
   let open Quickcheck.Generator.Let_syntax in

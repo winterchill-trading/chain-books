@@ -65,12 +65,14 @@ module Key = struct
 end
 
 let booked_balances chart balances =
-  List.concat_map (Ledger.Balances.accounts balances) ~f:(fun (account : Ledger.Account.t) ->
-    match Chart.location_of_account chart account.id with
-    | None -> []
-    | Some location ->
-      List.map (Ledger.Balances.currencies balances account.id) ~f:(fun asset ->
-        (location, asset), Ledger.Balances.posted balances account.id asset))
+  List.concat_map
+    (Ledger.Balances.accounts balances)
+    ~f:(fun (account : Ledger.Account.t) ->
+      match Chart.location_of_account chart account.id with
+      | None -> []
+      | Some location ->
+        List.map (Ledger.Balances.currencies balances account.id) ~f:(fun asset ->
+          (location, asset), Ledger.Balances.posted balances account.id asset))
   |> Key.Map.of_alist_exn
 ;;
 

@@ -18,7 +18,8 @@ let custody t (location : Location.t) =
 ;;
 
 let counterparty t category =
-  Ledger.Account_id.of_string (sprintf "%s:cp:%s" (prefix t) (Category.to_string category))
+  Ledger.Account_id.of_string
+    (sprintf "%s:cp:%s" (prefix t) (Category.to_string category))
 ;;
 
 let counter_account t ?category (activity : Activity.t) =
@@ -67,8 +68,7 @@ let missing_accounts t ?(classify = fun _ -> None) balances activities =
     let counter =
       match a.counter with
       | Location l -> custody_account t l
-      | Counterparty c ->
-        counterparty_account t (Option.value (classify a) ~default:c)
+      | Counterparty c -> counterparty_account t (Option.value (classify a) ~default:c)
     in
     [ custody_account t a.location; counter ])
   |> List.dedup_and_sort ~compare:(fun (a : Ledger.Account.t) b ->

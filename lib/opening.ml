@@ -48,5 +48,10 @@ let derive chart balances (observed : Observed.Balance.t) ~effective_at ~at =
         postings
       |> Or_error.map ~f:Option.some)
   in
-  { Derived.location = observed.location; observed = observed.amount; booked; difference; entry }
+  { Derived.location = observed.location
+  ; observed = observed.amount
+  ; booked
+  ; difference
+  ; entry
+  }
 ;;

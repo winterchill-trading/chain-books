@@ -48,7 +48,10 @@ module Retry_policy = struct
   [@@deriving sexp, compare, equal]
 
   let default =
-    { base = Time_ns.Span.of_int_sec 15; cap = Time_ns.Span.of_int_min 30; max_attempts = 10 }
+    { base = Time_ns.Span.of_int_sec 15
+    ; cap = Time_ns.Span.of_int_min 30
+    ; max_attempts = 10
+    }
   ;;
 
   (* Doubles step by step and stops at the cap: [Span.scale] by [2 ** n] raises once n
@@ -78,8 +81,10 @@ module Event = struct
   [@@deriving sexp, compare, equal]
 
   let at = function
-    | Accepted { at; _ } | Rejected { at; _ } | Outcome_unknown { at } | Seen_on_chain { at }
-      -> at
+    | Accepted { at; _ }
+    | Rejected { at; _ }
+    | Outcome_unknown { at }
+    | Seen_on_chain { at } -> at
   ;;
 end
 
@@ -153,7 +158,8 @@ let apply ?(policy = Retry_policy.default) t (event : Event.t) =
     set ~attempts:answered (Accepted { reference })
   | (Signed | Retrying), Rejected { reason = Nonce_used; _ } ->
     set ~attempts:answered Unconfirmed
-  | (Signed | Retrying), Rejected { reason; _ } -> set ~attempts:answered (Rejected reason)
+  | (Signed | Retrying), Rejected { reason; _ } ->
+    set ~attempts:answered (Rejected reason)
   | (Signed | Retrying), Outcome_unknown _ ->
     if answered >= policy.max_attempts
     then set ~attempts:answered Unconfirmed
@@ -164,7 +170,8 @@ let apply ?(policy = Retry_policy.default) t (event : Event.t) =
         Retrying
   | (Signed | Retrying | Accepted _ | Unconfirmed), Seen_on_chain _ -> set Confirmed
   | Confirmed, Seen_on_chain _ -> Ok t
-  | (Accepted _ | Confirmed | Rejected _ | Unconfirmed), (Accepted _ | Rejected _ | Outcome_unknown _)
+  | ( (Accepted _ | Confirmed | Rejected _ | Unconfirmed)
+    , (Accepted _ | Rejected _ | Outcome_unknown _) )
   | Rejected _, Seen_on_chain _ -> refuse ()
 ;;
 
@@ -181,7 +188,8 @@ let body_to_send t ~now =
   then Ok t.body
   else
     Or_error.error_s
-      [%message "chain write is not due" ~client_key:t.client_key ~status:(t.status : Status.t)]
+      [%message
+        "chain write is not due" ~client_key:t.client_key ~status:(t.status : Status.t)]
 ;;
 
 let needs_reversal t =

@@ -81,13 +81,20 @@ let%expect_test "shorts realise when bought back lower; unrealised against a mar
 
 let%expect_test "add_lot opens at a known cost and refuses the other direction" =
   let lot size price : Positions.Lot.t =
-    { size = Exact.of_string size; price = Exact.of_string price; opened_at = t0; opened_by = eid "open" }
+    { size = Exact.of_string size
+    ; price = Exact.of_string price
+    ; opened_at = t0
+    ; opened_by = eid "open"
+    }
   in
   let ps = Positions.empty Fifo in
-  let ps = Positions.add_lot ps ~address ~instrument:hype_spot (lot "10" "40") |> Or_error.ok_exn in
+  let ps =
+    Positions.add_lot ps ~address ~instrument:hype_spot (lot "10" "40") |> Or_error.ok_exn
+  in
   print_s
     [%sexp
-      (Positions.add_lot ps ~address ~instrument:hype_spot (lot "-1" "40") |> Or_error.map ~f:ignore
+      (Positions.add_lot ps ~address ~instrument:hype_spot (lot "-1" "40")
+       |> Or_error.map ~f:ignore
        : unit Or_error.t)];
   show ps;
   [%expect
@@ -111,9 +118,15 @@ let gen_fills =
   in
   let fills =
     List.mapi steps ~f:(fun i (buy, size, price) ->
-      fill (sprintf "q%d" i) (if buy then Buy else Sell) (Int.to_string size) (Int.to_string price))
+      fill
+        (sprintf "q%d" i)
+        (if buy then Buy else Sell)
+        (Int.to_string size)
+        (Int.to_string price))
   in
-  let net = List.fold fills ~init:Q.zero ~f:(fun acc f -> Q.add acc (Fill.signed_size f)) in
+  let net =
+    List.fold fills ~init:Q.zero ~f:(fun acc f -> Q.add acc (Fill.signed_size f))
+  in
   if Q.equal net Q.zero
   then fills
   else
@@ -127,8 +140,12 @@ let gen_fills =
 ;;
 
 let total_realised method_ fills =
-  let ps = List.fold fills ~init:(Positions.empty method_) ~f:(fun ps f -> fst (Positions.apply ps f)) in
-  List.fold (Positions.positions ps) ~init:Q.zero ~f:(fun acc p -> Q.add acc p.realised), ps
+  let ps =
+    List.fold fills ~init:(Positions.empty method_) ~f:(fun ps f ->
+      fst (Positions.apply ps f))
+  in
+  ( List.fold (Positions.positions ps) ~init:Q.zero ~f:(fun acc p -> Q.add acc p.realised)
+  , ps )
 ;;
 
 let%test_unit "a position that ends flat realises sells minus buys, with either method" =
@@ -148,9 +165,13 @@ let%test_unit "size is the sum of signed fills; reapplying every fill changes no
     let fills = List.drop_last_exn fills in
     List.iter Positions.Method.all ~f:(fun m ->
       let _, ps = total_realised m fills in
-      let net = List.fold fills ~init:Q.zero ~f:(fun acc f -> Q.add acc (Fill.signed_size f)) in
+      let net =
+        List.fold fills ~init:Q.zero ~f:(fun acc f -> Q.add acc (Fill.signed_size f))
+      in
       let size =
-        Option.value_map (Positions.find ps ~address ~instrument:btc_perp) ~default:Q.zero
+        Option.value_map
+          (Positions.find ps ~address ~instrument:btc_perp)
+          ~default:Q.zero
           ~f:Positions.Position.size
       in
       [%test_result: Exact.t] size ~expect:net;

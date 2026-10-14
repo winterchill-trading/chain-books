@@ -15,8 +15,7 @@ let%expect_test "matched, difference, untracked and not reported" =
     (Reconciliation.balances
        chart
        b
-       (observed
-          [ perp, usd "100"; spot, hy "4.5"; loc ~address:sub Spot, usd "7" ]));
+       (observed [ perp, usd "100"; spot, hy "4.5"; loc ~address:sub Spot, usd "7" ]));
   [%expect
     {|
     ((location ((address 0xa1) (venue Perp))) (asset USDC)
@@ -28,7 +27,9 @@ let%expect_test "matched, difference, untracked and not reported" =
     ((location ((address 0xb2) (venue Spot))) (asset USDC) (booked ())
      (observed ("7.000000 USDC")) (status Untracked))
     |}];
-  show (Reconciliation.breaks (Reconciliation.balances chart b (observed [ perp, usd "100" ])));
+  show
+    (Reconciliation.breaks
+       (Reconciliation.balances chart b (observed [ perp, usd "100" ])));
   [%expect
     {|
     ((location ((address 0xa1) (venue Spot))) (asset HYPE)
@@ -49,9 +50,15 @@ let%expect_test "a tolerance absorbs rounding" =
 ;;
 
 let%expect_test "an opening balance books what the window missed, once" =
-  let b = book Ledger.Balances.empty ~at:(at_min 10) [ activity "f1" Funding perp (usd "2") ] in
-  let ob = { Observed.Balance.location = perp; amount = usd "50"; observed_at = at_min 20 } in
-  let derived = Opening.derive chart b ob ~effective_at:t0 ~at:(at_min 20) |> Or_error.ok_exn in
+  let b =
+    book Ledger.Balances.empty ~at:(at_min 10) [ activity "f1" Funding perp (usd "2") ]
+  in
+  let ob =
+    { Observed.Balance.location = perp; amount = usd "50"; observed_at = at_min 20 }
+  in
+  let derived =
+    Opening.derive chart b ob ~effective_at:t0 ~at:(at_min 20) |> Or_error.ok_exn
+  in
   print_s [%sexp (derived : Opening.Derived.t)];
   [%expect
     {|
@@ -81,10 +88,13 @@ let%expect_test "an opening balance books what the window missed, once" =
     [%sexp
       (Ledger.Balances.apply
          b
-         { seq = Ledger.Balances.next_seq b; event = Posted (Option.value_exn derived.entry) }
+         { seq = Ledger.Balances.next_seq b
+         ; event = Posted (Option.value_exn derived.entry)
+         }
        |> Or_error.map ~f:ignore
        : unit Or_error.t)];
-  [%expect {|
+  [%expect
+    {|
     (Error
      ("idempotency key already booked"
       (idempotency_key chain:org1:opening:0xa1:perp:USDC) (booked_at 5)))
@@ -96,7 +106,12 @@ let%expect_test "positions: tracked against reported sizes" =
   let report : Observed.t =
     { balances = []
     ; positions =
-        [ { address; instrument = btc_perp; size = Exact.of_string "1.5"; entry_price = None; observed_at = t0 }
+        [ { address
+          ; instrument = btc_perp
+          ; size = Exact.of_string "1.5"
+          ; entry_price = None
+          ; observed_at = t0
+          }
         ; { address
           ; instrument = Instrument.perp ~coin:"ETH" ~settle:usdc |> Or_error.ok_exn
           ; size = Exact.of_string "-3"
@@ -159,9 +174,7 @@ let%test_unit "booked balances equal the activity sums and the ledger stays bala
   Quickcheck.test gen_activities ~trials:300 ~f:(fun activities ->
     let b = book Ledger.Balances.empty ~at:t0 activities in
     Ledger.Trial_balance.check (Ledger.Trial_balance.of_balances b) |> Or_error.ok_exn;
-    let report =
-      observed (Map.to_alist (expected_balances activities))
-    in
+    let report = observed (Map.to_alist (expected_balances activities)) in
     [%test_result: Reconciliation.Row.t list]
       (Reconciliation.breaks (Reconciliation.balances chart b report))
       ~expect:[];
