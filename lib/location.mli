@@ -1,6 +1,6 @@
 (** A custody location: one venue of one on-chain account. An organisation's binding may
     include sub-accounts, so the address is part of the location. Balances at a location
-    are kept per asset (a {!Money.Currency.t}). *)
+    are kept per asset (a [Money.Currency.t]). *)
 
 open! Core
 

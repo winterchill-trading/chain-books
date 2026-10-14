@@ -1,6 +1,6 @@
 (** Activities to ledger entries.
 
-    One activity is one single-currency {!Ledger.Entry.t} under the idempotency key
+    One activity is one single-currency [Ledger.Entry.t] under the idempotency key
     [chain:<binding>:<event id>], so reading the same history twice books it once (the
     journal answers the second append as a duplicate). An asset arriving at a location
     debits its custody account and credits the counter account; an asset leaving does the

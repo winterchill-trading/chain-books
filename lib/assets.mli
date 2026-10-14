@@ -1,4 +1,4 @@
-(** Currencies for on-chain assets that {!Money.Currency} lacks, registered when the
+(** Currencies for on-chain assets that [Money.Currency] lacks, registered when the
     library is linked so they parse before [Money.Currency.freeze]. USDC held at an
     exchange is [Money.Currency.usdc] (6 digits, no network tag). *)
 
