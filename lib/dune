@@ -1,0 +1,6 @@
+(library
+ (name chain_books)
+ (public_name chain-books)
+ (libraries core zarith money ledger)
+ (preprocess
+  (pps ppx_jane)))
