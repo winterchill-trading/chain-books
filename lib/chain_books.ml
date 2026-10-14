@@ -12,3 +12,4 @@ module Activity = Activity
 module Fill = Fill
 module Observed = Observed
 module Normalized = Normalized
+module Normalizer = Normalizer
