@@ -61,3 +61,21 @@ let balance b location currency =
 let cp_balance b category currency =
   Ledger.Balances.balance b (Chart.counterparty chart category) currency
 ;;
+
+let btc_perp = Instrument.perp ~coin:"BTC" ~settle:usdc |> Or_error.ok_exn
+let hype_spot = Instrument.spot ~base:hype ~quote:usdc |> Or_error.ok_exn
+
+let fill ?(address = address) ?(instrument = btc_perp) ?reported_pnl ?(at = t0) id side size price
+  =
+  Fill.create
+    ~event_id:(eid id)
+    ~address
+    ~instrument
+    ~side
+    ~size:(Exact.of_string size)
+    ~price:(Exact.of_string price)
+    ~occurred_at:at
+    ?reported_pnl
+    ()
+  |> Or_error.ok_exn
+;;
