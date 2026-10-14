@@ -19,7 +19,7 @@ jobs:
       - run: opam exec -- dune build
       - run: opam exec -- dune test
       - run: opam exec -- dune exec ./examples/quickstart.exe
-      - run: opam install -y odoc
+      - run: opam install -y result odoc
       - name: Build API docs (odoc warnings fail the step)
         env:
           ODOC_WARN_ERROR: "true"
