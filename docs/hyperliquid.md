@@ -16,8 +16,8 @@ shapes are the venue's.
 | `{"type":"clearinghouseState","user":A}` (and `"dex"`) | perpetuals account summary | `Hl_protocol.Clearinghouse_state` |
 | `{"type":"userFillsByTime",...}` | fills | `Hl_protocol.User_fill.Detailed` |
 
-Time-ranged requests answer at most 500 (fills, funding) or 2000 (ledger updates)
-items; page by asking again from the last item's time. Event ids are deterministic, so
+Time-ranged answers are capped (500 funding items and 2000 ledger updates in the
+samples); page by asking again from the last item's time. Event ids are deterministic, so
 overlapping pages book once.
 
 ## Observations
