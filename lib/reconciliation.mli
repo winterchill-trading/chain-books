@@ -65,8 +65,10 @@ val balances
   -> Observed.t
   -> Row.t list
 
-(** Rows for every position open in [positions] or listed in the report; a position
-    missing on one side counts as size zero there. Sorted by address and instrument. *)
+(** Rows for every perpetual position open in [positions] or listed in the report; a
+    position missing on one side counts as size zero there. Sorted by address and
+    instrument. Spot holdings are balances, reconciled by {!balances}; their lots in
+    {!Positions} only carry the cost basis. *)
 val positions : Positions.t -> Observed.t -> Position_row.t list
 
 (** The rows that are not [Matched]. *)

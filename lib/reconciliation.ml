@@ -129,8 +129,10 @@ end
 
 let positions tracked (observed : Observed.t) =
   let tracked =
-    List.map (Positions.open_positions tracked) ~f:(fun p ->
-      (p.address, p.instrument), Positions.Position.size p)
+    List.filter_map (Positions.open_positions tracked) ~f:(fun p ->
+      match p.instrument with
+      | Perp _ -> Some ((p.address, p.instrument), Positions.Position.size p)
+      | Spot _ -> None)
     |> Position_key.Map.of_alist_exn
   in
   let reported =
